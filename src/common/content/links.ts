@@ -1,0 +1,1 @@
+export const mainPartnersLink = "https://kingzasialuck.com/da830069b"
