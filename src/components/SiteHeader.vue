@@ -4,7 +4,7 @@
     <div class="greetings-wrapper">
       <div class="header-greetings">{{ headerGreetings }}</div>
       <img class="burger"
-           src="../../public/images/burger.webp"
+           src="../../public/images/burger.svg"
            alt="burger-menu"
            @click="burgerMenuClicked">
     </div>
