@@ -12,7 +12,9 @@
       </a>
     </div>
   </div>
-  <span class="popular-key">Kingz Asia alternatif</span>
+
+  <a :href="mainPartnersLink" class="popular-key">Kingz Asia alternatif</a>
+
   <div class="description">
     <p>{{ description }}</p>
   </div>
@@ -128,7 +130,7 @@ export default defineComponent({
 }
 
 .casino-wrapper {
-  margin-top: 150px;
+  margin-top: 80px;
   margin-bottom: 20px;
   cursor: pointer;
   z-index: 100;
@@ -193,10 +195,16 @@ export default defineComponent({
   font-size: 40px;
   font-weight: 700;
   margin: 10px auto;
-  z-index: 10;
+  z-index: 100;
+  transition: all ease 0.3s;
 
   @include breakpoint-mobile {
     font-size: 18px;
   }
+}
+
+.popular-key:hover {
+  text-decoration: underline;
+  scale: 1.05;
 }
 </style>

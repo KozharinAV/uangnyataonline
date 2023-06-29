@@ -5,7 +5,6 @@ module.exports = defineConfig({
     sitemap: {
       urls: [
         'https://uangnyataonline.com/',
-        'https://uangnyataonline.com/faq',
       ]
     }
   },
