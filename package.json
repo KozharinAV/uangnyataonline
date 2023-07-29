@@ -8,11 +8,15 @@
     "sitemap": "vue-cli-service sitemap"
   },
   "dependencies": {
+    "@vue/server-renderer": "^3.3.4",
     "@vueuse/head": "^1.1.26",
+    "express": "^4.18.2",
     "register-service-worker": "^1.7.2",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-pwa": "~5.0.0",

@@ -3,7 +3,7 @@
         <h2 class="games-title">{{ title }}</h2>
         <div class="page-container-column">
             <div :class="gameWrapperClass(index)"
-                 v-for="(game, index) in games"
+                 v-for="(game, index) in prepearedMoreGames()"
                  :key="index">
                 <h3 class="game-title column">{{ game.title }}</h3>
                 <div class="image-wrapper">
@@ -25,19 +25,27 @@
                 </div>
             </div>
         </div>
+
+        <pagination class="pagination"
+                    buttonType="point-button"
+                    :page-amount="paginationTwoPageAmount"
+                    @page-clicked="paginationTwoPageClicked" />
     </div>
 </template>
   
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import { mainPartnersLink } from '@/common/content/links';
 import CustomButton from '@/components/CustomButton.vue';
+import Pagination from '@/components/Pagination.vue';
 import { Game } from '@/common/content/picture+text/picture+text';
+import store from '@/store';
 
 export default defineComponent({
     name: 'GamesColumnView',
     components: {
-        CustomButton
+        CustomButton,
+        Pagination
     },
     props: {
         games: {
@@ -60,13 +68,26 @@ export default defineComponent({
     },
 
     setup(props) {
+        const isMobile = computed(() => store.getters.getBreakpoints.mobile);
         const downloadImages = computed(() => props.downloadImages);
         const gridAreas = ["gridA", "gridB", "gridC", "gridD", "gridE"];
         const gameWrapperClass = (index: number) => `game-wrapper-column ${gridAreas[index]}`;
+        //pagination
+        const paginationTwoPageAmount = ref(Math.ceil(props.games.length));
+        const paginationTwoCurrentPage = ref(0);
+        const prepearedMoreGames = () => {
+            if (isMobile.value) return props.games.filter((_, index) =>
+                index === paginationTwoCurrentPage.value);
+            else return props.games;
+        };
+        const paginationTwoPageClicked = (pageNumber: number) => paginationTwoCurrentPage.value = pageNumber;
         return {
             downloadImages,
             mainPartnersLink,
             gameWrapperClass,
+            paginationTwoPageAmount,
+            paginationTwoPageClicked,
+            prepearedMoreGames
         };
     }
 });
@@ -295,6 +316,14 @@ export default defineComponent({
 
     @include breakpoint-tablet() {
         display: none;
+    }
+}
+
+.pagination {
+    display: none;
+
+    @include breakpoint-mobile() {
+        display: flex;
     }
 }
 </style>

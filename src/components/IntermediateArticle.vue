@@ -8,7 +8,7 @@
         <h3 class="article title">{{ intermediateArticleDescription }}</h3>
         <div class="main-text">
             <p class="article"
-               v-for="(paragraph, index) in intermediateArticle"
+               v-for="(paragraph, index) in intermediateArticleText"
                :key="index">{{ paragraph }}</p>
         </div>
         <p class="article">{{ intermediateArticleConclusion }}</p>
@@ -33,7 +33,7 @@ export default defineComponent({
             type: String,
             default: ""
         },
-        intermediateArticle: {
+        intermediateArticleText: {
             type: Array as PropType<Array<string>>,
             default: ""
         },

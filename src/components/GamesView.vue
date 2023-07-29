@@ -3,7 +3,7 @@
         <h2 class="games-title">{{ title }}</h2>
         <div class="page-container">
             <div :class="gameWrapperClass(index)"
-                 v-for="(game, index) in games"
+                 v-for="(game, index) in prepearedGames()"
                  :key="index">
                 <div class="image-wrapper">
                     <img v-if="downloadImages"
@@ -25,19 +25,27 @@
                 </div>
             </div>
         </div>
+        <pagination class="pagination"
+                    buttonType="digit-button"
+                    :page-amount="paginationOnePageAmount"
+                    @page-clicked="paginationOnePageClicked" />
+
     </div>
 </template>
   
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import { mainPartnersLink } from '@/common/content/links';
 import CustomButton from '@/components/CustomButton.vue';
+import Pagination from '@/components/Pagination.vue';
 import { Game } from '@/common/content/picture+text/picture+text';
+import store from '@/store';
 
 export default defineComponent({
     name: 'GamesView',
     components: {
-        CustomButton
+        CustomButton,
+        Pagination
     },
     props: {
         games: {
@@ -60,6 +68,7 @@ export default defineComponent({
     },
 
     setup(props) {
+        const isMobile = computed(() => store.getters.getBreakpoints.mobile);
         const downloadImages = computed(() => props.downloadImages);
         const gameWrapperClass = (index: number) => {
             let style = "game-wrapper";
@@ -67,11 +76,27 @@ export default defineComponent({
             return style;
         };
         const gameTitleClass = (index: number) => index % 2 === 0 ? "game-title column" : `game-title column left`;
+
+        //1st pagination
+        const gamesPerPage1 = 2;
+        const paginationOnePageAmount = ref(Math.ceil(props.games.length / 2));
+        const paginationOneCurrentPage = ref(0);
+        const prepearedGames = (): Array<Game> => {
+            if (isMobile.value) return props.games.filter((_, index) =>
+                index >= paginationOneCurrentPage.value * gamesPerPage1
+                && index < paginationOneCurrentPage.value * gamesPerPage1 + gamesPerPage1);
+            else return props.games;
+        };
+        const paginationOnePageClicked = (pageNumber: number) => paginationOneCurrentPage.value = pageNumber;
+
         return {
             downloadImages,
             mainPartnersLink,
             gameWrapperClass,
-            gameTitleClass
+            gameTitleClass,
+            prepearedGames,
+            paginationOnePageAmount,
+            paginationOnePageClicked
         };
     }
 });
@@ -222,6 +247,14 @@ export default defineComponent({
 
     @include breakpoint-tablet() {
         display: none;
+    }
+}
+
+.pagination {
+    display: none;
+
+    @include breakpoint-mobile() {
+        display: flex;
     }
 }
 </style>
